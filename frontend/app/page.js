@@ -36,7 +36,7 @@ export default function Home() {
             <div className="lg:w-1/2 flex justify-center">
               <div className="relative w-full h-64 sm:h-72 md:h-96 lg:h-[450px]">
                 <Image
-                  src="/medical-appointment.png"
+                  src="/medical-appointment.jpg"
                   alt="Medical appointment"
                   fill
                   style={{ objectFit: "cover" }}
