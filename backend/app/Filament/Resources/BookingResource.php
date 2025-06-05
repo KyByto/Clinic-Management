@@ -31,17 +31,111 @@ class BookingResource extends Resource
                     })
                     ->required()
                     ->searchable()
-                    ->preload(),
+                    ->preload()
+                    ->reactive(), // Make this field reactive to update validation
                 Forms\Components\Select::make('client_id')
                     ->relationship('client', 'name')
                     ->required()
                     ->searchable()
                     ->preload(),
                 Forms\Components\DatePicker::make('booking_date')
-                    ->required(),
+                    ->required()
+                    ->afterStateUpdated(function ($state, callable $set) {
+                        // Clear booking time when date changes to force re-validation
+                        $set('booking_time', null);
+                    })
+                    ->reactive()
+                    ->rules([
+                        function ($get, $set, $state) {
+                            return function (string $attribute, $value, \Closure $fail) use ($get) {
+                                $offerId = $get('offer_id');
+                                if (!$offerId) return;
+                                
+                                $offer = \App\Models\Offer::find($offerId);
+                                if (!$offer) return;
+                                
+                                // Check if offer is active
+                                if (!$offer->is_active) {
+                                    $fail("This offer is not active and cannot be booked.");
+                                    return;
+                                }
+                              
+                                
+                                // Check if the selected day is in available_days
+                                if ($offer->available_days) {
+                                    $bookingDayOfWeek = date('l', strtotime($value)); // Get day name (Monday, Tuesday, etc.)
+                                    $bookingDayOfWeek = strtolower($bookingDayOfWeek); // Convert to lowercase for comparison
+                                    if($offer->available_days[$bookingDayOfWeek]) {
+                                        if($offer->available_days[$bookingDayOfWeek]["available"] === false) {
+                                            $fail("This offer is Not Active on {$bookingDayOfWeek}s.");
+                                            return;
+                                    }
+
+
+
+                                    
+                                }
+                                else  {
+                                        $fail("This offer is not available on {$bookingDayOfWeek}s.");
+                                        return;
+                                    }
+
+                                }
+                            };
+                        }
+                    ]),
                 Forms\Components\TimePicker::make('booking_time')
                     ->required()
-                    ->seconds(false),
+                    ->seconds(false)
+                    ->rules([
+                        function ($get, $set, $state) {
+                            return function (string $attribute, $value, \Closure $fail) use ($get) {
+                                $offerId = $get('offer_id');
+                                $bookingDate = $get('booking_date');
+                                
+                               
+                                if (!$offerId || !$bookingDate || !$value) return;
+                                
+                                $offer = \App\Models\Offer::find($offerId);
+                                if (!$offer) return;
+                                
+                                // Get day of week from booking_date, not from the time value
+                                $bookingDayOfWeek = strtolower(date('l', strtotime($bookingDate)));
+                              
+                                // Check if offer is active
+                                if (!$offer->is_active) {
+                                    $fail("This offer is not active and cannot be booked.");
+                                    return;
+                                }
+                                
+                                // Check if the selected day is in available_days and has time constraints
+                                $availableDays = $offer->available_days;
+                                
+                                if (!$availableDays || !isset($availableDays[$bookingDayOfWeek])) {
+                                    $fail("This offer is not available on {$bookingDayOfWeek}s.");
+                                    return;
+                                }
+                                
+                                // Check if the day is available and has time constraints
+                                $daySettings = $availableDays[$bookingDayOfWeek];
+                                
+                                if (!isset($daySettings['available']) || $daySettings['available'] === false) {
+                                    $fail("This offer is not available on {$bookingDayOfWeek}s.");
+                                    return;
+                                }
+                                
+                                // Check time constraints if they exist
+                                if (isset($daySettings['start_time']) && isset($daySettings['end_time'])) {
+                                    $bookingTime = date('H:i', strtotime($value));
+                                    
+                                    if ($bookingTime < $daySettings['start_time'] || $bookingTime > $daySettings['end_time']) {
+                                        $fail("Booking time must be between {$daySettings['start_time']} and {$daySettings['end_time']} on {$bookingDayOfWeek}s.");
+                                        return;
+                                    }
+                                }
+                            };
+                        }
+                    ]),
                 Forms\Components\Select::make('status')
                     ->options([
                         'pending' => 'Pending',
