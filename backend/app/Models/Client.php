@@ -22,6 +22,7 @@ class Client extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
     ];
 
     protected $table = 'clients'; 
@@ -46,5 +47,23 @@ class Client extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Route notifications for the Vonage channel.
+     *
+     * @return string
+     */
+    public function routeNotificationForVonage()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * Get the bookings for the client.
+     */
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
     }
 }

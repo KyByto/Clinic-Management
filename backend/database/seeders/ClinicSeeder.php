@@ -20,6 +20,5 @@ class ClinicSeeder extends Seeder
         ]);
         
         // Create additional random clinics
-        Clinic::factory()->count(5)->create();
     }
 }

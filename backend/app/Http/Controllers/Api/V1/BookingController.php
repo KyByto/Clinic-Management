@@ -9,13 +9,17 @@ use App\Models\Booking;
 use App\Models\Offer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Services\NotificationService;
 
 class BookingController extends Controller
 {
-    public function __construct()
+     protected $notificationService;
+
+    public function __construct(NotificationService $notificationService)
     {
-        // Vide, plus besoin d'injection de repository
+        $this->notificationService = $notificationService;
     }
+   
 
     public function index(Request $request)
     {
@@ -59,4 +63,14 @@ class BookingController extends Controller
             ], 500);
         }
     }
+    public function sendNotification(Booking $booking)
+    {
+        $notificationSent = $this->notificationService->sendBookingConfirmation($booking);
+
+        return response()->json([
+            'success' => $notificationSent,
+            'message' => $notificationSent ? 'Notification sent successfully' : 'Failed to send notification'
+        ]);
+    }
+
 }
