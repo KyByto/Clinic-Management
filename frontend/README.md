@@ -1,35 +1,89 @@
+# Clinic Booking System - Frontend
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+## Project Overview
+
+This frontend application serves as the client interface for our Clinic Booking System, providing:
+
+- **Public offer browsing**: Users can view available clinical services
+- **Booking functionality**: Interactive form for scheduling appointments
+- **Responsive design**: Optimized for both mobile and desktop
+- **Secure API integration**: Communication with Laravel backend
+
+## Technologies Used
+
+- **Next.js 14**: React framework with server-side rendering
+- **React**: UI component library
+- **Tailwind CSS**: Utility-first CSS framework for styling
+- **SWR**: React Hooks for data fetching
+- **Axios**: HTTP client for API requests
+- **React Hook Form**: Form validation
+- **Context API**: State management
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js 16.8.0 or later
+- npm or yarn package manager
+- Backend API running (Laravel application)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/clinic-booking-system.git
+   cd clinic-booking-system/frontend
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-## Learn More
+3. Configure environment variables:
+   - Create a `.env.local` file in the root directory
+   - Add the following variables:
+   ```
+   NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+   NEXT_PUBLIC_ASSET_URL=http://localhost:8000
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+4. Run the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   # or
+   bun dev
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Application Structure
 
-## Deploy on Vercel
+- `app/` - Next.js App Router pages and layouts
+- `components/` - Reusable UI components
+- `hooks/` - Custom React hooks
+- `services/` - API service functions
+- `context/` - React Context providers
+- `styles/` - Global CSS and Tailwind configuration
+- `public/` - Static assets
+
+## Key Features
+
+- **Offer Browsing**: Interactive catalog of clinical services
+- **Search & Filter**: Find services by category, price, and availability
+- **Booking Flow**: Multi-step form with date/time selection
+- **User Authentication**: Login/registration for clients
+- **Booking History**: View past and upcoming appointments
+
+## Deployment
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 

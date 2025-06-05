@@ -8,17 +8,14 @@ use Illuminate\Support\Facades\Log;
 class NotificationService
 {
     /**
-     * Send a simple booking confirmation notification (simulated with logs)
-     *
-     * @param Booking $booking
-     * @return bool
+     * Send a booking confirmation notification (simulated with logs)
      */
     public function sendBookingConfirmation(Booking $booking): bool
     {
-        // Simulate a small delay as if contacting an external service
-        usleep(300000); // 300ms delay
+        // Simulate external service delay
+        usleep(300000);
         
-        // Log the notification for simulation purposes
+        // Log notification details for simulation
         Log::info('NOTIFICATION SENT: Booking confirmation', [
             'booking_id' => $booking->id,
             'client_id' => $booking->client_id,

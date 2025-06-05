@@ -5,41 +5,33 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Booking extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'user_id',
-        'offer_id',
-        'client_id',
-        'booking_date',
-        'booking_time',
-        'status',
-        'payment_status',
-        'payment_method',
-        'transaction_id',
-        'paid_at',
-        'notes',
-    ];
-
-    protected $casts = [
-        'booking_date' => 'date',
-        'paid_at' => 'datetime',
-    ];
-
     /**
-     * Get the offer that owns the booking.
+     * The attributes that are mass assignable
      */
-    public function offer(): BelongsTo
-    {
-        return $this->belongsTo(Offer::class);
-    }
+    protected $fillable = [
+        'client_id',
+        'offer_id',
+        'booking_date',
+        'status',
+        'notes',
+        'payment_status',
+        'booking_time',
+    ];
 
     /**
-     * Get the client that owns the booking.
+     * The attributes that should be cast
+     */
+    protected $casts = [
+        'booking_date' => 'datetime',
+    ];
+
+    /**
+     * Get the client that owns the booking
      */
     public function client(): BelongsTo
     {
@@ -47,10 +39,10 @@ class Booking extends Model
     }
 
     /**
-     * Get the payment associated with the booking.
+     * Get the offer associated with this booking
      */
-    public function payment(): HasOne
+    public function offer(): BelongsTo
     {
-        return $this->hasOne(Payment::class);
+        return $this->belongsTo(Offer::class);
     }
 }

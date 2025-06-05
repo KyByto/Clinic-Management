@@ -34,22 +34,16 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // ...existing code...
 
         $this->routes(function () {
-            // ...existing code...
 
             Route::middleware('api')
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));
 
-            // Ajoutez cette ligne pour charger votre fichier auth.php
-            Route::middleware('api')
-                ->group(base_path('routes/auth.php'));
+            
 
-            // ...existing code...
         });
 
-        // ...existing code...
     }
 }
